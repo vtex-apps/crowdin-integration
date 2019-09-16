@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "form-data": "^2.5.1",
+    "koa-compose": "^4.0.0",
+    "ramda": "^0.25.0"
+  },
+  "devDependencies": {
+    "@types/koa-compose": "^3.2.0",
+    "@types/node": "8.x",
+    "@types/ramda": "types/npm-ramda#dist",
+    "@types/form-data": "^2.2.1",
+    "@vtex/api": "^3.53.0",
+    "tslint": "^5.14.0",
+    "tslint-config-vtex": "^2.1.0",
+    "typescript": "3.5.2"
+  },
+  "scripts": {
+    "lint": "tsc --noEmit --pretty && tslint -c tslint.json --fix './**/*.ts'"
+  }
+}
