@@ -7,16 +7,17 @@ export async function doNothing(ctx: ColossusEventContext, next: () => Promise<a
 }
 
 export async function unwrap(ctx: ColossusEventContext, next: () => Promise<any>){
-  const {clients: {crowdin}} = ctx
+  const {clients: {crowdin, vbase}} = ctx
+
+  console.log('---body',ctx.body)
 
   console.log('CHEGUEI NO UNWRAP')
 
-
-  const response = await crowdin.updateSourceFile().catch(err=>{
+  const blerg = {blerg: 'hellooooo', blurg: 'buy'}
+  const response = await crowdin.updateSourceFile(blerg,'en-US','kasdjbalskdfAAAH', vbase).catch(err=>{
     console.log(err.response)
   })
 
-  console.log('---response',response)
   await next ()
 }
 
