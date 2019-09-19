@@ -1,7 +1,8 @@
 import { ClientsConfig, LRUCache, Service } from '@vtex/api'
 import { Clients } from './clients/index'
-import { doNothing, unwrap } from './events/unwrap'
+import { doNothing, unwrap } from './crowdinAPI/unwrap'
 import { State } from './typings/Colossus'
+import { updateCrowdinProject } from './crowdinAPI/update';
 
 const TIMEOUT_MS = 3000
 const TRANSLATION_CONCURRENCY = 5

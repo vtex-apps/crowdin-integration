@@ -1,4 +1,4 @@
-import { objToHash } from ".";
+import { objToHash } from '.'
 
 
 
