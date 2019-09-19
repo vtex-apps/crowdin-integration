@@ -1,13 +1,21 @@
+import { map } from 'bluebird'
+import { toPairs } from 'ramda'
 import { ColossusEventContext } from '../typings/Colossus'
-import { toCrowdinFilePath, toVbaseSourceCrowdinFileName } from '../utils/crowdin';
-import { CROWDIN_BUCKET } from '../utils/constants';
-import { fromPairs } from '@vtex/api/node_modules/@types/ramda';
+import { UpdateMessageToCrowdinArg } from '../typings/Messages'
+import { CROWDIN_BUCKET } from '../utils/constants'
+import { toCrowdinFilePath, toVbaseSourceCrowdinFileName } from '../utils/crowdin'
 
 
+const updateCrowdinTranslation = async ( args: UpdateMessageToCrowdinArg, {clients: {crowdin}} : ColossusEventContext) => {
+  const {messages, groupContext, lang} = args
+  const {dirPath, fileName} = toCrowdinFilePath(groupContext)
+  return await crowdin.addTranslation(messages, dirPath+fileName, lang)
+}
 
-const  updateCrowdinSrcFile = async ( args: any, {clients: {crowdin, vbase}} : ColossusEventContext) => {
 
-  const {data, groupContext, lang} = args
+const  updateCrowdinSrcFile = async ( args: UpdateMessageToCrowdinArg, {clients: {crowdin, vbase}} : ColossusEventContext) => {
+
+  const {messages, groupContext, lang} = args
 
   // Merge old file with new one
 
@@ -16,26 +24,21 @@ const  updateCrowdinSrcFile = async ( args: any, {clients: {crowdin, vbase}} : C
   const srcFile =  await vbase.getJSON<any>(CROWDIN_BUCKET, vbaseFileName, true) || {}
   const mergedSrcFile = {
     ...srcFile,
-    ...data,
+    ...messages,
   }
   await vbase.saveJSON<any>(CROWDIN_BUCKET, vbaseFileName, mergedSrcFile)
 
   // Try to update source file
-  const updated = await crowdin.updateSourceFile(data, dirPath+fileName, lang)
+  const updated = await crowdin.updateSourceFile(messages, dirPath+fileName, lang)
 
-  console.log('---response',updated)
+  console.log('---Updated? ',updated)
 
-  const added = updated || await crowdin.addDirectory(dirPath, lang).then(()=>crowdin.addSourceFile(data, dirPath+fileName, lang))
+  if (!updated && !dirPath){
+    await crowdin.addDirectory(dirPath, lang)
+  }
+  const added = updated || await crowdin.addSourceFile(messages, dirPath+fileName, lang)
 
-  // let added
-  // if (!updated){
-  //   console.log('ask to add directories if needed')
-  //   await crowdin.addDirectory(dirPath, lang)
-  //   added = await crowdin.addSourceFile(data, dirPath+fileName, lang)
-  //   console.log('---res do add file:', added)
-  // }
-
-  return updated || added
+  return added
 }
 
 
@@ -56,16 +59,18 @@ export async function updateCrowdinProject(ctx: ColossusEventContext, next: () =
     },
 }
 
-
-
-  // const {from, to, messagesCrowdinByGroupContext} = ctx.state
-
-
-  const groupContext = 'SKU-Id.37'
-  const lang = 'en-US'
+  const {from, to, messagesCrowdinByGroupContext} = ctx.state
+  const messagesCrowdinByGroupContextPairs = toPairs(messagesCrowdinByGroupContext)
+  await map(
+    messagesCrowdinByGroupContextPairs,
+    ([groupContext, messages]) => {
+      (from === to)? updateCrowdinSrcFile({messages, groupContext, lang: from}, ctx) :
+      updateCrowdinTranslation({messages, groupContext, lang: to}, ctx)
+    }
+  )
 
   // check if from === to
 
-  const updatedSrc = await updateCrowdinSrcFile({data,groupContext,lang}, ctx)
-  console.log('Success of operation: ', updatedSrc)
+  // const updatedSrc = await updateCrowdinSrcFile({data,groupContext,lang}, ctx)
+  // console.log('Success of operation: ', updatedSrc)
 }

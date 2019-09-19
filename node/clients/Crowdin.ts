@@ -13,7 +13,7 @@ export class Crowdin extends ExternalClient {
   }
 
   // This method replaces the entire source file in crowdin if it exists, or creates a new one if it does not.
-  public async updateSourceFile(data: any, filePath: string, srcLang: string,){
+  public async updateSourceFile(data: any, filePath: string, srcLang: string){
 
 
     // Check if source path doesn't already exist, if not, create it
@@ -72,6 +72,29 @@ export class Crowdin extends ExternalClient {
     console.log(response)
 
     return !errMsg
+  }
+
+  public async addTranslation (data: any, filePath: string, to: string){
+
+    const formData = new FormData()
+    const buf = Buffer.from(JSON.stringify(data))
+
+    formData.append(`files[${filePath}]`,buf,{filename: 'translation.json'})
+    formData.append('language', to)
+    formData.append('json','')
+
+    console.log('\n---translations to upload: ',data, '\n---lang:', to)
+
+    let errMsg
+    const res = await this.http.post<any>(`/api/project/${this.projectName}/upload-translation?key=${this.key}`,formData,{headers:{
+    ...formData.getHeaders(),
+    verbose: true,
+    json:true}}).catch((err)=>{errMsg = err.response})
+    const response = res || errMsg
+    console.log(response)
+
+    return !errMsg
+
   }
 
 

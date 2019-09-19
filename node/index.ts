@@ -17,6 +17,7 @@ const clients: ClientsConfig<Clients> = {
     default: {
       retries: 2,
       timeout: TIMEOUT_MS,
+      verbose: true,
     },
     messagesGraphQL: {
       concurrency: TRANSLATION_CONCURRENCY,
@@ -35,6 +36,6 @@ const clients: ClientsConfig<Clients> = {
 export default new Service<Clients, State>({
   clients,
   events: {
-    userLocalesUpdate: [unwrap],
+    userLocalesUpdate: [unwrap, updateCrowdinProject],
   },
 })

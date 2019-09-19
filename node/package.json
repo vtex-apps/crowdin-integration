@@ -1,15 +1,17 @@
 {
   "dependencies": {
+    "bluebird": "^3.5.5",
     "crypto": "^1.0.1",
     "form-data": "^2.5.1",
     "koa-compose": "^4.0.0",
     "ramda": "^0.25.0"
   },
   "devDependencies": {
+    "@types/bluebird": "^3.5.27",
+    "@types/form-data": "^2.2.1",
     "@types/koa-compose": "^3.2.0",
     "@types/node": "8.x",
     "@types/ramda": "types/npm-ramda#dist",
-    "@types/form-data": "^2.2.1",
     "@vtex/api": "^3.53.0",
     "tslint": "^5.14.0",
     "tslint-config-vtex": "^2.1.0",

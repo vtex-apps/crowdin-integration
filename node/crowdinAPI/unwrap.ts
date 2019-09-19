@@ -1,6 +1,6 @@
 
 import { ColossusEventContext } from '../typings/Colossus'
-import { MessagesCrowdinByGroupContext, MessagesIO } from '../typings/Messages'
+import { MessagesCrowdinByGroupContext, MessagesIO, MessagesCrowdin } from '../typings/Messages'
 import { objToHash } from '../utils'
 
 
@@ -9,6 +9,7 @@ export async function doNothing(ctx: ColossusEventContext, next: () => Promise<a
 }
 
 export async function unwrap(ctx: ColossusEventContext, next: () => Promise<any>){
+  console.log('---Unwrap!!!!')
   const {from, to, messages: inputMessages} = ctx.body
 
   if (!inputMessages || !from || !to){
@@ -21,8 +22,8 @@ export async function unwrap(ctx: ColossusEventContext, next: () => Promise<any>
       acc[groupContext] = {
         ...(acc[groupContext] || {}),
         [messageHash] : {
-          ...context && { description: context},
           message: targetMessage,
+          ...context && { description: context},
         },
       }
       return acc

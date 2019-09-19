@@ -7,6 +7,8 @@ export interface MessagesIO {
   context?: string
 }
 
+
+
 export interface MessagesCrowdin {
   [key: string] : {
     message: string
@@ -16,4 +18,10 @@ export interface MessagesCrowdin {
 
 export interface MessagesCrowdinByGroupContext {
   [groupContext: string]: MessagesCrowdin
+}
+
+export interface UpdateMessageToCrowdinArg {
+  lang: string,
+  groupContext: string,
+  messages: MessagesCrowdin
 }
