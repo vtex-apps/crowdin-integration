@@ -14,7 +14,7 @@ export const toCrowdinFilePath = (groupContext: string) => {
     dirPath = 'Catalog/Brands/'
   }
   if (groupContext.toLowerCase().startsWith('category')){
-    dirPath = 'Catalog/Brands/'
+    dirPath = 'Catalog/Categories/'
   }
   if (groupContext.toLowerCase().startsWith('specification')){
     dirPath = 'Catalog/'

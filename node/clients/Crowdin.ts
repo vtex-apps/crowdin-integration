@@ -88,7 +88,6 @@ export class Crowdin extends ExternalClient {
     let errMsg
     const res = await this.http.post<any>(`/api/project/${this.projectName}/upload-translation?key=${this.key}`,formData,{headers:{
     ...formData.getHeaders(),
-    verbose: true,
     json:true}}).catch((err)=>{errMsg = err.response})
     const response = res || errMsg
     console.log(response)
@@ -99,5 +98,3 @@ export class Crowdin extends ExternalClient {
 
 
 }
-
-// class form-data

@@ -10,8 +10,9 @@ export async function doNothing(ctx: ColossusEventContext, next: () => Promise<a
 
 export async function unwrap(ctx: ColossusEventContext, next: () => Promise<any>){
   console.log('---Unwrap!!!!')
-  const {from, to, messages: inputMessages} = ctx.body
-
+  const {from: fromIn, to: toIn, messages: inputMessages} = ctx.body
+  const from = fromIn === 'en-DV' ? 'en-US' : fromIn
+  const to =  toIn === 'en-DV' ? 'en-US' : toIn
   if (!inputMessages || !from || !to){
     return
   }
@@ -35,7 +36,7 @@ export async function unwrap(ctx: ColossusEventContext, next: () => Promise<any>
   ctx.state.from = from
   ctx.state.to = to
 
-  console.log('\n---inputMessages',inputMessages, '\n---messagesByGroupContext: ', messagesByGroupContext)
+  console.log('\n from: ', from, '\n to: ', to, '\n---inputMessages',inputMessages, '\n---messagesByGroupContext: ', messagesByGroupContext)
 
   await next()
 

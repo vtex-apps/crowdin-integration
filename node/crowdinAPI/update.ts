@@ -26,14 +26,15 @@ const  updateCrowdinSrcFile = async ( args: UpdateMessageToCrowdinArg, {clients:
     ...srcFile,
     ...messages,
   }
+  console.log('\n ---dirPath: ', dirPath, '\n ---fileName', fileName, '\n ---vbaseFileName: ',vbaseFileName,'\n---srcFile: ',srcFile,'\n---mergedSrcFile:',mergedSrcFile)
   await vbase.saveJSON<any>(CROWDIN_BUCKET, vbaseFileName, mergedSrcFile)
 
   // Try to update source file
-  const updated = await crowdin.updateSourceFile(messages, dirPath+fileName, lang)
+  const updated = await crowdin.updateSourceFile(mergedSrcFile, dirPath+fileName, lang)
 
   console.log('---Updated? ',updated)
 
-  if (!updated && !dirPath){
+  if (!updated && dirPath){
     await crowdin.addDirectory(dirPath, lang)
   }
   const added = updated || await crowdin.addSourceFile(messages, dirPath+fileName, lang)

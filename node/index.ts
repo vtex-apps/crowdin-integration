@@ -17,7 +17,7 @@ const clients: ClientsConfig<Clients> = {
     default: {
       retries: 2,
       timeout: TIMEOUT_MS,
-      verbose: true,
+      // verbose: true,
     },
     messagesGraphQL: {
       concurrency: TRANSLATION_CONCURRENCY,
