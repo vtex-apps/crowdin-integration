@@ -1,7 +1,6 @@
-import { MessagesCrowdin, MessagesCrowdinByGroupContext } from './Messages';
-import { EventContext, IOClients } from '@vtex/api'
+import { EventContext } from '@vtex/api'
 import { Clients } from '../clients'
-import { Locales } from './IOMessages'
+import { MessagesCrowdinByGroupContext } from './Messages'
 
 
 
@@ -19,17 +18,4 @@ export interface State {
   to: string
   from: string
   messagesCrowdinByGroupContext: MessagesCrowdinByGroupContext
-}
-
-
-export interface ColossusEvent {
-  appId: string
-  key: string
-  message: string
-  sender: string
-  senderName: string
-  trigger: string
-  buildId: string
-  buildCode: string
-  routeId: string
 }

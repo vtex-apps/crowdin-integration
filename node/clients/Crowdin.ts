@@ -1,9 +1,6 @@
-import { CROWDIN_BUCKET, FILE_NOT_FOUND } from './../utils/constants'
-import { toCrowdinFilePath, toVbaseSourceCrowdinFileName } from './../utils/crowdin'
 
-import {ExternalClient, InstanceOptions, IOContext, VBase} from '@vtex/api'
+import { ExternalClient, InstanceOptions, IOContext } from '@vtex/api'
 import FormData from 'form-data'
-import { path } from 'ramda'
 
 export class Crowdin extends ExternalClient {
   private key = 'af2e938c45b8c104ab3222c6e6e4ba98' // get this from settings somehow
@@ -95,6 +92,5 @@ export class Crowdin extends ExternalClient {
     return !errMsg
 
   }
-
 
 }

@@ -45,20 +45,6 @@ const  updateCrowdinSrcFile = async ( args: UpdateMessageToCrowdinArg, {clients:
 
 export async function updateCrowdinProject(ctx: ColossusEventContext, next: () => Promise<any>){
 
-   // Mock data
-   const data = {
-    hashloca1: {
-      message: 'Nice day today!',
-      description: 'front page greeting',
-    },
-    hashlocao2: {
-      message: 'Don\'t go gentle into that good night',
-      description: 'interstellar poem',
-    },
-    hashlocao3: {
-      message: 'Nice day today!',
-    },
-}
 
   const {from, to, messagesCrowdinByGroupContext} = ctx.state
   const messagesCrowdinByGroupContextPairs = toPairs(messagesCrowdinByGroupContext)
@@ -70,8 +56,6 @@ export async function updateCrowdinProject(ctx: ColossusEventContext, next: () =
     }
   )
 
-  // check if from === to
+  await next()
 
-  // const updatedSrc = await updateCrowdinSrcFile({data,groupContext,lang}, ctx)
-  // console.log('Success of operation: ', updatedSrc)
 }

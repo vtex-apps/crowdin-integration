@@ -1,8 +1,8 @@
 import { ClientsConfig, LRUCache, Service } from '@vtex/api'
 import { Clients } from './clients/index'
 import { doNothing, unwrap } from './crowdinAPI/unwrap'
-import { State } from './typings/Colossus'
 import { updateCrowdinProject } from './crowdinAPI/update';
+import { State } from './typings/Colossus'
 
 const TIMEOUT_MS = 3000
 const TRANSLATION_CONCURRENCY = 5
@@ -17,7 +17,6 @@ const clients: ClientsConfig<Clients> = {
     default: {
       retries: 2,
       timeout: TIMEOUT_MS,
-      // verbose: true,
     },
     messagesGraphQL: {
       concurrency: TRANSLATION_CONCURRENCY,

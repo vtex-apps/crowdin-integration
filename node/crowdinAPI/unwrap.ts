@@ -1,6 +1,6 @@
 
 import { ColossusEventContext } from '../typings/Colossus'
-import { MessagesCrowdinByGroupContext, MessagesIO, MessagesCrowdin } from '../typings/Messages'
+import { MessagesCrowdinByGroupContext, MessagesIO } from '../typings/Messages'
 import { objToHash } from '../utils'
 
 
