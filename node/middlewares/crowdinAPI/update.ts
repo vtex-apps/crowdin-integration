@@ -1,9 +1,9 @@
 import { map } from 'bluebird'
 import { toPairs } from 'ramda'
-import { ColossusEventContext } from '../typings/Colossus'
-import { UpdateMessageToCrowdinArg } from '../typings/Messages'
-import { CROWDIN_BUCKET } from '../utils/constants'
-import { toCrowdinFilePath, toVbaseSourceCrowdinFileName } from '../utils/crowdin'
+import { ColossusEventContext } from '../../typings/Colossus'
+import { UpdateMessageToCrowdinArg } from '../../typings/Messages'
+import { CROWDIN_BUCKET } from '../../utils/constants'
+import { toCrowdinFilePath, toVbaseSourceCrowdinFileName } from '../../utils/crowdin'
 
 
 const updateCrowdinTranslation = async ( args: UpdateMessageToCrowdinArg, {clients: {crowdin}} : ColossusEventContext) => {

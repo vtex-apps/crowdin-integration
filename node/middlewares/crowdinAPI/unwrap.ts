@@ -1,7 +1,7 @@
 
-import { ColossusEventContext } from '../typings/Colossus'
-import { MessagesCrowdinByGroupContext, MessagesIO } from '../typings/Messages'
-import { objToHash } from '../utils'
+import { ColossusEventContext } from '../../typings/Colossus'
+import { MessagesCrowdinByGroupContext, MessagesIO } from '../../typings/Messages'
+import { objToHash } from '../../utils'
 
 
 export async function doNothing(ctx: ColossusEventContext, next: () => Promise<any>){

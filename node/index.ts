@@ -1,7 +1,8 @@
 import { ClientsConfig, LRUCache, Service } from '@vtex/api'
 import { Clients } from './clients/index'
-import { doNothing, unwrap } from './crowdinAPI/unwrap'
-import { updateCrowdinProject } from './crowdinAPI/update';
+import { doNothing, unwrap } from './middlewares/crowdinAPI/unwrap'
+import { updateCrowdinProject } from './middlewares/crowdinAPI/update'
+import { getSettings } from './middlewares/settings/settings'
 import { State } from './typings/Colossus'
 
 const TIMEOUT_MS = 3000
@@ -35,6 +36,6 @@ const clients: ClientsConfig<Clients> = {
 export default new Service<Clients, State>({
   clients,
   events: {
-    userLocalesUpdate: [unwrap, updateCrowdinProject],
+    userLocalesUpdate: [ getSettings, unwrap, updateCrowdinProject],
   },
 })
