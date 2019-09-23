@@ -47,12 +47,30 @@
       "name": "outbound-access",
       "attrs": {
         "host": "api.crowdin.com",
-        "path": "/api/project/experimental/*"
+        "path": "/api/project/*"
       }
     }
   ],
   "registries": [
     "smartcheckout"
   ],
-  "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
+  "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema",
+  "settingsSchema": {
+    "title": "Crowdin Integration",
+    "type": "object",
+    "properties": {
+      "projectName": {
+        "title": "Crowdin project name",
+        "type": "string",
+        "default": "experimental",
+        "description": "Enter your Crowdin project to import and export translations"
+      },
+      "projectKey": {
+        "title": "Crowdin project key",
+        "type": "string",
+        "description": "Enter your Crowdin project key for authentification",
+        "default": "af2e938c45b8c104ab3222c6e6e4ba98"
+      }
+    }
+  }
 }

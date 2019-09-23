@@ -1,4 +1,4 @@
-import { EventContext } from '@vtex/api'
+import { EventContext, Settings } from '@vtex/api'
 import { Clients } from '../clients'
 import { MessagesCrowdinByGroupContext } from './Messages'
 
@@ -18,4 +18,5 @@ export interface State {
   to: string
   from: string
   messagesCrowdinByGroupContext: MessagesCrowdinByGroupContext
+  settings: Settings
 }
