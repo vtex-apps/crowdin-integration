@@ -1,14 +1,3 @@
-
-
-export interface MessagesIO {
-  srcMessage: string
-  targetMessage: string
-  groupContext?: string
-  context?: string
-}
-
-
-
 export interface MessagesCrowdin {
   [key: string] : {
     message: string
@@ -16,8 +5,12 @@ export interface MessagesCrowdin {
   }
 }
 
-export interface MessagesCrowdinByGroupContext {
-  [groupContext: string]: MessagesCrowdin
+export interface MessagesCrowdinBySrcLang {
+  [from: string]: MessagesCrowdin
+}
+
+export interface MessagesCrowdinByGroupContextAndSrcLang {
+  [groupContext: string]: MessagesCrowdinBySrcLang
 }
 
 export interface UpdateMessageToCrowdinArg {
