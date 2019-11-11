@@ -1,9 +1,8 @@
 import { EventContext } from '@vtex/api'
+
 import { Clients } from '../clients'
 import { Settings } from './../directives/settings'
-import { MessagesCrowdinByGroupContext } from './Messages'
-
-
+import { MessagesCrowdinByGroupContextAndSrcLang } from './Messages'
 
 export interface ColossusEventContext extends EventContext<Clients,State> {
   status: number
@@ -14,10 +13,8 @@ export interface ColossusEventContext extends EventContext<Clients,State> {
   state: State
 }
 
-
 export interface State {
   to: string
-  from: string
-  messagesCrowdinByGroupContext: MessagesCrowdinByGroupContext
+  messagesCrowdinByGroupContextAndSrcLang: MessagesCrowdinByGroupContextAndSrcLang
   settings: Settings
 }

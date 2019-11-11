@@ -1,16 +1,14 @@
-import { ClientsConfig, LRUCache, Service } from '@vtex/api'
+import { ClientsConfig, Service } from '@vtex/api'
+
 import { Clients } from './clients/index'
-import { doNothing, unwrap } from './middlewares/crowdinAPI/unwrap'
-import { updateCrowdinProject } from './middlewares/crowdinAPI/update'
-import { getSettings } from './middlewares/settings/settings'
+import { unwrap } from './events/crowdinAPI/unwrap'
+import { updateCrowdinProject } from './events/crowdinAPI/update'
+import { getSettings } from './events/settings'
 import { State } from './typings/Colossus'
 
 const TIMEOUT_MS = 3000
 const TRANSLATION_CONCURRENCY = 5
 const TRANSLATION_RETRIES = 3
-
-const memoryCache = new LRUCache<string, any>({max: 5000})
-metrics.trackCache('status', memoryCache)
 
 const clients: ClientsConfig<Clients> = {
   implementation: Clients,
@@ -24,18 +22,12 @@ const clients: ClientsConfig<Clients> = {
       retries: TRANSLATION_RETRIES,
       timeout: TIMEOUT_MS,
     },
-    status: {
-      memoryCache,
-    },
   },
 }
-
-
-
 
 export default new Service<Clients, State>({
   clients,
   events: {
-    userLocalesUpdate: [ getSettings, unwrap, updateCrowdinProject],
+    updateMessage: [getSettings, unwrap, updateCrowdinProject],
   },
 })

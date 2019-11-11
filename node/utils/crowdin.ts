@@ -1,7 +1,5 @@
 import { objToHash } from '.'
 
-
-
 export const toCrowdinFilePath = (groupContext: string) => {
   let dirPath = ''
   if (groupContext.toLowerCase().startsWith('product')){
@@ -27,5 +25,6 @@ export const toCrowdinFilePath = (groupContext: string) => {
 }
 
 export const toVbaseSourceCrowdinFileName = (dirPath: string, fileName: string) => {
-  return `${objToHash<string>(dirPath+fileName)}.json`
+  const filePath = `${dirPath}${fileName}`
+  return `${objToHash<string>(filePath)}.json`
 }
