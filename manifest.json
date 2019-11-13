@@ -1,7 +1,7 @@
 {
   "name": "crowdin-integration",
   "vendor": "vtex",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "title": "Crowdin integration",
   "description": "IO-Crowdin API",
   "mustUpdateAt": "2020-07-29",
@@ -11,7 +11,7 @@
   },
   "builders": {
     "node": "4.x",
-    "docs":  "0.x"
+    "docs": "0.x"
   },
   "scripts": {
     "prereleasy": "bash lint.sh"
