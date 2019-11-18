@@ -4,7 +4,7 @@ import { Clients } from '../clients'
 import { Settings } from './../directives/settings'
 import { MessagesCrowdinByGroupContextAndSrcLang } from './Messages'
 
-export interface ColossusEventContext extends EventContext<Clients,State> {
+export interface ColossusEventContext extends EventContext<Clients, State> {
   status: number
   key: string
   sender: string

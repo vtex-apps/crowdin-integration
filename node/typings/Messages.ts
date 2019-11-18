@@ -1,6 +1,7 @@
 export interface MessagesCrowdin {
   [key: string] : {
-    message: string
+    message: string,
+    srcMessage?: string,
     description?: string
   }
 }
@@ -14,7 +15,8 @@ export interface MessagesCrowdinByGroupContextAndSrcLang {
 }
 
 export interface UpdateMessageToCrowdinArg {
-  lang: string,
+  to?: string,
+  from: string,
   groupContext: string,
   messages: MessagesCrowdin
 }

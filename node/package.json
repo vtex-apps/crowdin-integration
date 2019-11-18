@@ -1,14 +1,17 @@
 {
   "dependencies": {
     "bluebird": "^3.5.5",
+    "co-body": "^6.0.0",
     "crypto": "^1.0.1",
     "form-data": "^2.5.1",
     "koa-compose": "^4.0.0",
-    "ramda": "^0.25.0"
+    "ramda": "^0.25.0",
+    "@vtex/api": "3.63.0"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.27",
     "@types/form-data": "^2.2.1",
+    "@types/co-body": "^0.x",
     "@types/koa-compose": "^3.2.0",
     "@types/node": "8.x",
     "@types/ramda": "types/npm-ramda#dist",

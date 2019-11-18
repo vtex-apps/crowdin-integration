@@ -92,6 +92,15 @@
     "@types/connect" "*"
     "@types/node" "*"
 
+"@types/co-body@^0.x":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@types/co-body/-/co-body-0.0.3.tgz#cd65c1b986f003fea2d50334c2654fbcd479c741"
+  integrity sha512-Arrl3/wGJ2+tmwPTEESQpKxBXbvTNwPA5fgSfk5IdL+drDnkT2CSOn/FPcBqpxCCF/SoaNfm9W/OgWLTydMKuw==
+  dependencies:
+    "@types/koa" "*"
+    "@types/node" "*"
+    "@types/qs" "*"
+
 "@types/connect@*":
   version "3.4.32"
   resolved "https://registry.yarnpkg.com/@types/connect/-/connect-3.4.32.tgz#aa0e9616b9435ccad02bc52b5b454ffc2c70ba28"
@@ -215,6 +224,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.14.17.tgz#b96d4dd3e427382482848948041d3754d40fd5ce"
   integrity sha512-p/sGgiPaathCfOtqu2fx5Mu1bcjuP8ALFg4xpGgNkcin7LwRyzUKniEHBKdcE1RPsenq5JVPIpMTJSygLboygQ==
 
+"@types/qs@*":
+  version "6.9.0"
+  resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.0.tgz#2a5fa918786d07d3725726f7f650527e1cfeaffd"
+  integrity sha512-c4zji5CjWv1tJxIZkz1oUtGcdOlsH3aza28Nqmm+uNDWBRHoMsjooBEN4czZp1V3iXPihE/VRUOBqg+4Xq0W4g==
+
 "@types/ramda@types/npm-ramda#dist":
   version "0.25.0"
   resolved "https://codeload.github.com/types/npm-ramda/tar.gz/9529aa3c8ff70ff84afcbc0be83443c00f30ea90"
@@ -237,10 +251,10 @@
   dependencies:
     "@types/node" "*"
 
-"@vtex/api@^3.62.0":
-  version "3.62.4"
-  resolved "https://registry.yarnpkg.com/@vtex/api/-/api-3.62.4.tgz#705030a3f72086bd8ff7f715634d4e46d9924b0f"
-  integrity sha512-HRmoxuDxS+9eT1KawVwoeRQrMQwzSudX6NOHAfljRYCB3qzolPSJ4Ls62uXEq0ny7+HP7dm6ayrkHnGZ3alVCA==
+"@vtex/api@3.63.0":
+  version "3.63.0"
+  resolved "https://registry.yarnpkg.com/@vtex/api/-/api-3.63.0.tgz#e10e24c9a127e95f7e4c274688b5ecca7d0b7717"
+  integrity sha512-U/+71xt8qALdqj8dacAHLV3CgaF7JOU/O7TQ3t3S3d9Nn4R3r4Rwtafd1nxJH8AZkAvRnvIl6uKw/ckvw29TQA==
   dependencies:
     "@types/koa" "^2.0.48"
     "@types/koa-compose" "^3.2.3"
@@ -1452,7 +1466,7 @@ sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
 
-"stats-lite@github:vtex/node-stats-lite#dist":
+stats-lite@vtex/node-stats-lite#dist:
   version "2.2.0"
   resolved "https://codeload.github.com/vtex/node-stats-lite/tar.gz/1b0d39cc41ef7aaecfd541191f877887a2044797"
   dependencies:

@@ -1,10 +1,11 @@
-import { ClientsConfig, Service } from '@vtex/api'
+import { ClientsConfig, method, Service } from '@vtex/api'
 
 import { Clients } from './clients/index'
 import { unwrap } from './events/crowdinAPI/unwrap'
 import { updateCrowdinProject } from './events/crowdinAPI/update'
 import { getSettings } from './events/settings'
-import { State } from './typings/Colossus'
+import { logUpdateInTranslations } from './middlewares/listenToUpdates'
+import { saveIOMessage } from './middlewares/saveUpdateInMessages'
 
 const TIMEOUT_MS = 3000
 const TRANSLATION_CONCURRENCY = 5
@@ -29,5 +30,10 @@ export default new Service<Clients, State>({
   clients,
   events: {
     updateMessage: [getSettings, unwrap, updateCrowdinProject],
+  },
+  routes: {
+    listenToUpdates: method({
+      POST: [logUpdateInTranslations, saveIOMessage],
+    }),
   },
 })
