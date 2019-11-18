@@ -9,5 +9,12 @@
       "sender": "vtex.messages",
       "keys": ["updateMessage"]
     }
+  },
+  "routes" : {
+    "listenToUpdates": {
+      "path": "/_v/translations/update",
+      "public": true,
+      "smartcache": false
+    }
   }
 }
