@@ -28,6 +28,7 @@ export async function unwrap(ctx: ColossusEventContext, next: () => Promise<any>
         ...acc[groupContext][srcLang],
         [messageHash] : {
           message: targetMessage,
+          srcMessage,
           ...context && {description: context},
         },
       }
