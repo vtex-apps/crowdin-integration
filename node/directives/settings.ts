@@ -1,19 +1,20 @@
 
 export interface Settings {
-  projectName: string
-  projectKey: string
+  projectId: string
+  tokenApiV2: string
 }
 
 export const DEFAULT_SETTINGS: Settings = {
-  projectKey: '1bd13aade43525ad0b16e845ae21c629', // Change the default when setting via admin will be available. This is ony for testing.
-  projectName: 'messagesio',
+  // Change the default when setting via admin will be available. This is ony for testing.
+  projectId: '',
+  tokenApiV2: '',
 }
 
 export const settings = async (appSettings: any): Promise<Settings> => {
-  const {projectName, projectKey}: Settings = {...DEFAULT_SETTINGS, ...appSettings}
+  const {projectId, tokenApiV2}: Settings = {...DEFAULT_SETTINGS, ...appSettings}
   return {
-    projectKey,
-    projectName,
+    projectId,
+    tokenApiV2,
   }
 }
 
