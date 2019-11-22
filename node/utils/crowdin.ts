@@ -28,3 +28,14 @@ export const toVbaseSourceCrowdinFileName = (dirPath: string, fileName: string) 
   const filePath = `${dirPath}${fileName}`
   return `${objToHash<string>(filePath)}.json`
 }
+
+export function languageLocaleToCrowdinId(lang: string): string {
+  switch (lang) {
+    case 'en-US':
+      return 'en'
+    case 'ja-JP':
+      return 'ja'
+    default:
+      return lang
+  }
+}

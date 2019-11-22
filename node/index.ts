@@ -3,6 +3,7 @@ import { ClientsConfig, method, Service } from '@vtex/api'
 import { Clients } from './clients/index'
 import { unwrap } from './events/crowdinAPI/unwrap'
 import { updateCrowdinProject } from './events/crowdinAPI/update'
+import { saveInCrowdin } from './events/export'
 import { getSettings } from './events/settings'
 import { logUpdateInTranslations } from './middlewares/listenToUpdates'
 import { saveIOMessage } from './middlewares/saveUpdateInMessages'
@@ -29,6 +30,7 @@ const clients: ClientsConfig<Clients> = {
 export default new Service<Clients, State>({
   clients,
   events: {
+    receiveExportedMessages: [saveInCrowdin],
     updateMessage: [getSettings, unwrap, updateCrowdinProject],
   },
   routes: {
