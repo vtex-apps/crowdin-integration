@@ -6,13 +6,11 @@ import { UpdateMessageToCrowdinArg } from '../../typings/Messages'
 import { objToHash } from '../../utils'
 import { CROWDIN_BUCKET } from '../../utils/constants'
 
-const updateStringBasedCrowdinString = async (args: UpdateMessageToCrowdinArg, {clients: {crowdin, vbase}}: ColossusEventContext) => {
-  // Before saving a new string in the Crowdin project we should verify if the language in which the string is being saved is the same as the project lang.
-  // If it is not we should return an error or the Crowdin project should be chosed based in the language in which the string is being saved.
+const updateStringBasedCrowdinString = async (args: UpdateMessageToCrowdinArg, {clients: {crowdin, vbase}}: ColossusEventContext, srcLang: string) => {
   const messagesInPairs = toPairs(args.messages)
   const groupContext = args.groupContext ? args.groupContext : ''
   map(async ([key, {message}]) => {
-    const saveMessageInCrowdin = await crowdin.addString({message, key, groupContext})
+    const saveMessageInCrowdin = await crowdin.addStringBySrcLang({message, key, groupContext}, srcLang)
     if(saveMessageInCrowdin.err) {
       console.log(saveMessageInCrowdin.err)
     } else {
@@ -25,15 +23,15 @@ const updateStringBasedCrowdinString = async (args: UpdateMessageToCrowdinArg, {
   }, messagesInPairs)
 }
 
-const updateStringBasedCrowdinTranslation = async (args: UpdateMessageToCrowdinArg, {clients: {crowdin, vbase}}: ColossusEventContext) => {
+const updateStringBasedCrowdinTranslation = async (args: UpdateMessageToCrowdinArg, {clients: {crowdin, vbase}}: ColossusEventContext, srcLang: string) => {
   const messagesInPairs = toPairs(args.messages)
   map(async ([_, {message, srcMessage, description}]) => {
     const context = description ? description : ''
     const vbaseFileName = objToHash<string>(srcMessage + (context || '') + args.from)
     const stringCrowdinId = await vbase.getJSON<any>(CROWDIN_BUCKET, vbaseFileName, true)
-    const saveMessageInCrowdin = await crowdin.addTranslationString({translation: message, to: args.to!, stringId: stringCrowdinId.crowdinId})
-    if(saveMessageInCrowdin.err) {
-      console.log(saveMessageInCrowdin.err)
+    const saveTranslationsInCrowdin = await crowdin.addTranslationBySrcLang({translation: message, to: args.to!, stringId: stringCrowdinId.crowdinId}, srcLang)
+    if(saveTranslationsInCrowdin.err) {
+      console.log(saveTranslationsInCrowdin.err)
     }
   }, messagesInPairs)
 }
@@ -49,8 +47,8 @@ export async function updateCrowdinProject(ctx: ColossusEventContext, next: () =
       map(
         ([srcLang, messages]) => {
           (srcLang === to) ?
-            updateStringBasedCrowdinString({messages, groupContext, from: srcLang}, ctx) :
-            updateStringBasedCrowdinTranslation({messages, groupContext, to, from: srcLang}, ctx)
+            updateStringBasedCrowdinString({messages, groupContext, from: srcLang}, ctx, srcLang) :
+            updateStringBasedCrowdinTranslation({messages, groupContext, to, from: srcLang}, ctx, srcLang)
         },
         messagesBySrcLangPairs
       )

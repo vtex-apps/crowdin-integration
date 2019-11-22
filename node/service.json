@@ -8,6 +8,10 @@
     "updateMessage": {
       "sender": "vtex.messages",
       "keys": ["updateMessage"]
+    },
+    "receiveExportedMessages": {
+      "sender": "vtex.messages",
+      "keys": ["sendExportedMessages"]
     }
   },
   "routes" : {

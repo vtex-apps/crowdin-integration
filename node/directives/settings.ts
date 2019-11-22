@@ -1,12 +1,12 @@
 
 export interface Settings {
-  projectId: string
+  projectId: Record<string, string>
   tokenApiV2: string
 }
 
 export const DEFAULT_SETTINGS: Settings = {
   // Change the default when setting via admin will be available. This is ony for testing.
-  projectId: '',
+  projectId: {},
   tokenApiV2: '',
 }
 
