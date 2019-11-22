@@ -1,7 +1,7 @@
 {
   "name": "crowdin-integration",
   "vendor": "vtex",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "title": "Crowdin integration",
   "description": "IO-Crowdin API",
   "mustUpdateAt": "2020-07-29",
