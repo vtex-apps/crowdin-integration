@@ -4,14 +4,13 @@ import { reduce } from 'ramda'
 import { ColossusEventContext } from '../../typings/Colossus'
 import { MessagesCrowdinByGroupContextAndSrcLang } from '../../typings/Messages'
 import { objToHash } from '../../utils'
+import { languageLocaleToCrowdinLanguageId } from '../../utils/crowdin'
 
 export async function unwrap(ctx: ColossusEventContext, next: () => Promise<any>){
   const messagesObject = ctx.body as MessagesObject
-  const to = messagesObject.to === 'en-DV' ? 'en-US' : messagesObject.to
+  const to = languageLocaleToCrowdinLanguageId(messagesObject.to)
   const messages = messagesObject.messages.map((message) => {
-    if(message.srcLang === 'en-DV') {
-      message.srcLang = 'en-US'
-    }
+    message.srcLang = languageLocaleToCrowdinLanguageId(message.srcLang)
     return message
   })
   if(!messages || ! to) {

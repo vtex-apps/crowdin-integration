@@ -10,14 +10,18 @@ export interface TranslationToCrowdin {
   stringId: number
 }
 
+export interface CrowdinListProjects {
+  data: CrowdinGetProjectResponse[]
+}
+
 export interface CrowdinGetProjectResponse {
   data: CrowdinGetProjectResponseData
 }
 
 interface CrowdinGetProjectResponseData {
-  id: 8,
-  groupId: 4,
-  userId: 6,
+  id: string,
+  groupId: string,
+  userId: string,
   sourceLanguageId: string,
   targetLanguageIds: string[],
   joinPolicy: string,
@@ -35,10 +39,6 @@ interface CrowdinGetProjectResponseData {
   hasCrowdsourcing: boolean,
   createdAt: string,
   updatedAt: string
-}
-
-export interface CrowdinListStringsResponse {
-  data: CrowdinGetStringResponse[]
 }
 
 export interface CrowdinGetStringResponse {
