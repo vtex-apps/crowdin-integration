@@ -30,12 +30,12 @@ const clients: ClientsConfig<Clients> = {
 export default new Service<Clients, State>({
   clients,
   events: {
-    receiveExportedMessages: [saveInCrowdin],
+    receiveExportedMessages: [getSettings, saveInCrowdin],
     updateMessage: [getSettings, unwrap, updateCrowdinProject],
   },
   routes: {
     listenToUpdates: method({
-      POST: [logUpdateInTranslations, saveIOMessage],
+      POST: [getSettings, logUpdateInTranslations, saveIOMessage],
     }),
   },
 })

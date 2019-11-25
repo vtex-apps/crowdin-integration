@@ -1,60 +1,27 @@
 import { ExternalClient, InstanceOptions, IOContext } from '@vtex/api'
-import { prop } from 'ramda'
 
-import { DEFAULT_SETTINGS } from '../directives/settings'
 import {
   CrowdinGetProjectResponse,
   CrowdinGetStringResponse,
   CrowdinGetTranslationResponse,
+  CrowdinListProjects,
   StringToCrowdin,
   TranslationToCrowdin
 } from '../typings/Crowdin'
-
-const errorProjectNotExists = (lang: string) =>
-`There is not a project in the lang ${lang} in Crowdin. You need to create it before saving strings in that language.`
+import { crowdinSettings } from '../utils/crowdin'
 
 export class Crowdin extends ExternalClient {
-  // For now using DEFAULT_SETTINGS, but should get this and tokenApiV2 from settings somehow.
-  private projectId = DEFAULT_SETTINGS.projectId
-
   constructor(context: IOContext, options?: InstanceOptions){
     super('http://api.crowdin.com', context, {
       ...options,
       headers: {
         ['x-vtex-use-https']: 'true',
-        Authorization: `Bearer ${DEFAULT_SETTINGS.tokenApiV2}`,
+        Authorization: `Bearer ${crowdinSettings.tokenApiV2}`,
       },
     })
   }
 
-  public async addStringBySrcLang(data: StringToCrowdin, lang: string) {
-    const dataToCrowdin = {
-      context: data.groupContext,
-      identifier: data.key,
-      text: data.message,
-    }
-    const projectId = prop(lang, this.projectId)
-    let errMsg
-
-    if(!projectId) {
-      return {
-        err: errorProjectNotExists(lang),
-        res: null,
-      }
-    }
-
-    const res = await this.http.post<any>(`/api/v2/projects/${projectId}/strings`,
-      dataToCrowdin,
-      { headers: { json: true }})
-      .catch((err) => {errMsg = err.response})
-
-    return {
-      err: errMsg,
-      res,
-    }
-  }
-
-  public async addStringByProjectId(data: StringToCrowdin, projectId: string) {
+  public async addString(data: StringToCrowdin, projectId: string) {
     const dataToCrowdin = {
       context: data.groupContext,
       identifier: data.key,
@@ -73,32 +40,7 @@ export class Crowdin extends ExternalClient {
     }
   }
 
-  public async addTranslationBySrcLang(data: TranslationToCrowdin, lang: string) {
-    const dataToCrowdin = {
-      languageId: data.to,
-      stringId: data.stringId,
-      text: data.translation,
-    }
-    const projectId = prop(lang, this.projectId)
-    let errMsg
-
-    if(!projectId) {
-      return {
-        err: errorProjectNotExists(lang),
-        res: null,
-      }
-    }
-    const res = await this.http.post<any>(`/api/v2/projects/${projectId}/translations`,
-      dataToCrowdin,
-      { headers: { json: true }})
-      .catch((err) => {errMsg = err.response})
-    return {
-      err: errMsg,
-      res,
-    }
-  }
-
-  public async addTranslationByProjectId(data: TranslationToCrowdin, projectId: string) {
+  public async addTranslation(data: TranslationToCrowdin, projectId: string) {
     const dataToCrowdin = {
       languageId: data.to,
       stringId: data.stringId,
@@ -116,25 +58,7 @@ export class Crowdin extends ExternalClient {
     }
   }
 
-  public async getStringBySrcLang(stringId: string, lang: string) {
-    let errMsg
-    const projectId = prop(lang, this.projectId)
-
-    if(!projectId) {
-      return {
-        err: errorProjectNotExists(lang),
-        res: null,
-      }
-    }
-    const res = await this.http.get<CrowdinGetStringResponse>(`/api/v2/projects/${projectId}/strings/${stringId}`)
-      .catch((err) => {errMsg = err.response})
-    return {
-      err: errMsg,
-      res,
-    }
-  }
-
-  public async getStringByProjectId(stringId: string, projectId: string) {
+  public async getString(stringId: string, projectId: string) {
     let errMsg
     const res = await this.http.get<CrowdinGetStringResponse>(`/api/v2/projects/${projectId}/strings/${stringId}`)
       .catch((err) => {errMsg = err.response})
@@ -144,25 +68,7 @@ export class Crowdin extends ExternalClient {
     }
   }
 
-  public async getTranslationBySrcLang(translationId: string, lang: string) {
-    let errMsg
-    const projectId = prop(lang, this.projectId)
-
-    if(!projectId) {
-      return {
-        err: errorProjectNotExists(lang),
-        res: null,
-      }
-    }
-    const res = await this.http.get<CrowdinGetTranslationResponse>(`/api/v2/projects/${projectId}/translations/${translationId}`)
-      .catch((err) => {errMsg = err.response})
-    return {
-      err: errMsg,
-      res,
-    }
-  }
-
-  public async getTranslationByProjectId(translationId: string, projectId: string) {
+  public async getTranslation(translationId: string, projectId: string) {
     let errMsg
     const res = await this.http.get<CrowdinGetTranslationResponse>(`/api/v2/projects/${projectId}/translations/${translationId}`)
       .catch((err) => {errMsg = err.response})
@@ -172,16 +78,8 @@ export class Crowdin extends ExternalClient {
     }
   }
 
-  public async getProjectBySrcLang(lang: string) {
+  public async getProject(projectId: string) {
     let errMsg
-    const projectId = prop(lang, this.projectId)
-
-    if(!projectId) {
-      return {
-        err: errorProjectNotExists(lang),
-        res: null,
-      }
-    }
     const res = await this.http.get<CrowdinGetProjectResponse>(`/api/v2/projects/${projectId}`)
       .catch((err) => {errMsg = err.response})
     return {
@@ -190,9 +88,9 @@ export class Crowdin extends ExternalClient {
     }
   }
 
-  public async getProjectByProjectId(projectId: string) {
+  public async listProjects() {
     let errMsg
-    const res = await this.http.get<CrowdinGetProjectResponse>(`/api/v2/projects/${projectId}`)
+    const res = await this.http.get<CrowdinListProjects>(`/api/v2/projects`)
       .catch((err) => {errMsg = err.response})
     return {
       err: errMsg,

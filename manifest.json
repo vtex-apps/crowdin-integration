@@ -19,13 +19,6 @@
   "credentialType": "absolute",
   "policies": [
     {
-      "name": "outbound-access",
-      "attrs": {
-        "host": "httpstat.us",
-        "path": "*"
-      }
-    },
-    {
       "name": "colossus-fire-event"
     },
     {
@@ -63,17 +56,11 @@
     "title": "Crowdin Integration",
     "type": "object",
     "properties": {
-      "projectName": {
-        "title": "Crowdin project name",
+      "CrowdinAPIToken": {
+        "title": "Token for Crowdin API V2",
         "type": "string",
-        "default": "experimental",
-        "description": "Enter your Crowdin project to import and export translations"
-      },
-      "projectKey": {
-        "title": "Crowdin project key",
-        "type": "string",
-        "description": "Enter your Crowdin project key for authentification",
-        "default": "af2e938c45b8c104ab3222c6e6e4ba98"
+        "default": "",
+        "description": "Enter your Crowdin Personal Access Token for API V2"
       }
     }
   }

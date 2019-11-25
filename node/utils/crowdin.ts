@@ -1,4 +1,6 @@
 import { objToHash } from '.'
+import { Crowdin } from '../clients/Crowdin'
+import { CrowdinListProjects } from '../typings/Crowdin'
 
 export const toCrowdinFilePath = (groupContext: string) => {
   let dirPath = ''
@@ -29,9 +31,9 @@ export const toVbaseSourceCrowdinFileName = (dirPath: string, fileName: string) 
   return `${objToHash<string>(filePath)}.json`
 }
 
-export function languageLocaleToCrowdinId(lang: string): string {
+export function languageLocaleToCrowdinLanguageId(lang: string): string {
   switch (lang) {
-    case 'en-US':
+    case 'en-DV':
       return 'en'
     case 'ja-JP':
       return 'ja'
@@ -39,3 +41,22 @@ export function languageLocaleToCrowdinId(lang: string): string {
       return lang
   }
 }
+
+export async function languageLocaleToCrowdinProjectId(crowdin: Crowdin, languageLocale: string) {
+  const crowdinLangId = languageLocaleToCrowdinLanguageId(languageLocale)
+  const projectsInfoObj = await crowdin.listProjects()
+  if(projectsInfoObj.err) {
+    return {value: null, err: 'Error getting projects list for account'}
+  }
+  const projectsInfo = (projectsInfoObj.res as CrowdinListProjects).data
+  const projectBySrcLang = projectsInfo.filter((projectInfo) => projectInfo.data.sourceLanguageId === crowdinLangId)
+  if(projectBySrcLang.length === 0) {
+    return {value: null, err: `There is not a project with source language ${crowdinLangId} in Crowdin. You need to create it before saving strings in that language.`}
+  }
+  if(projectBySrcLang.length > 1) {
+    return {value: null, err: `There is more than one project with source language ${crowdinLangId} in Crowdin. Cannot resolve which project use for this language.`}
+  }
+  return {value: projectBySrcLang[0].data.id, err: null}
+}
+
+export const crowdinSettings = { tokenApiV2: '' }
