@@ -16,7 +16,7 @@ export async function logUpdateInTranslations(ctx: Context, next: () => Promise<
   const vbaseFileName = body.source_string_id
   const stringCrowdinId = await vbase.getJSON<any>(CROWDIN_BUCKET, vbaseFileName, true)
   const stringId = stringCrowdinId.crowdinId
-  const srcMessageInfoFromCrowdin = await crowdin.getStringByProjectId(stringId, body.project_id)
+  const srcMessageInfoFromCrowdin = await crowdin.getString(stringId, body.project_id)
   if(srcMessageInfoFromCrowdin.err) {
     logger.error('Error getting updated message from Crowdin')
     return
@@ -25,14 +25,14 @@ export async function logUpdateInTranslations(ctx: Context, next: () => Promise<
   const groupContext = (srcMessageInfoFromCrowdin.res as CrowdinGetStringResponse).data.context
 
   const targetMessageCrowdinId = body.translation_id
-  const targetMessageInfoFromCrowdin = await crowdin.getTranslationByProjectId(targetMessageCrowdinId, body.project_id)
+  const targetMessageInfoFromCrowdin = await crowdin.getTranslation(targetMessageCrowdinId, body.project_id)
   if(targetMessageInfoFromCrowdin.err) {
     logger.error('Error getting updated message from Crowdin')
     return
   }
   const targetMessage = (targetMessageInfoFromCrowdin.res as CrowdinGetTranslationResponse).data.text
 
-  const projectInfoFromCrowdin = await crowdin.getProjectByProjectId(body.project_id)
+  const projectInfoFromCrowdin = await crowdin.getProject(body.project_id)
   if(projectInfoFromCrowdin.err) {
     logger.error('Error getting project info from Crowdin')
     return
