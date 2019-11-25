@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Allow multiple projects for different source languages
+- Use only the token for Crowdin API V2 as setting
+- Use app settings set in admin
+- Improve errors logs
 
 ## [0.5.0] - 2019-11-22
 ### Added
