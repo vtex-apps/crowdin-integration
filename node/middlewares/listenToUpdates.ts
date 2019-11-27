@@ -18,7 +18,7 @@ export async function logUpdateInTranslations(ctx: Context, next: () => Promise<
   const stringId = stringCrowdinId.crowdinId
   const srcMessageInfoFromCrowdin = await crowdin.getString(stringId, body.project_id)
   if(srcMessageInfoFromCrowdin.err) {
-    logger.error('Error getting updated message from Crowdin')
+    logger.error(srcMessageInfoFromCrowdin.err)
     return
   }
   const srcMessage = (srcMessageInfoFromCrowdin.res as CrowdinGetStringResponse).data.text
@@ -27,14 +27,14 @@ export async function logUpdateInTranslations(ctx: Context, next: () => Promise<
   const targetMessageCrowdinId = body.translation_id
   const targetMessageInfoFromCrowdin = await crowdin.getTranslation(targetMessageCrowdinId, body.project_id)
   if(targetMessageInfoFromCrowdin.err) {
-    logger.error('Error getting updated message from Crowdin')
+    logger.error(targetMessageInfoFromCrowdin.err)
     return
   }
   const targetMessage = (targetMessageInfoFromCrowdin.res as CrowdinGetTranslationResponse).data.text
 
   const projectInfoFromCrowdin = await crowdin.getProject(body.project_id)
   if(projectInfoFromCrowdin.err) {
-    logger.error('Error getting project info from Crowdin')
+    logger.error(projectInfoFromCrowdin.err)
     return
   }
   const srcLang = (projectInfoFromCrowdin.res as CrowdinGetProjectResponse).data.sourceLanguageId

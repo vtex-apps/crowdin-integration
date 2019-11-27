@@ -1,3 +1,4 @@
+import { TooManyRequestsError } from '@vtex/api'
 import { map as mapP } from 'bluebird'
 import { map, toPairs } from 'ramda'
 
@@ -13,11 +14,15 @@ const updateStringBasedCrowdinString = async (args: UpdateMessageToCrowdinArg, {
   map(async ([key, {message}]) => {
     const projectId = await languageLocaleToCrowdinProjectId(crowdin, srcLang)
     if (projectId.err) {
-      logger.error(`Error getting projectId from Crowdin. Returned error: ${projectId.err}`)
+      logger.error(projectId.err)
     } else if (projectId.value) {
       const saveMessageInCrowdin = await crowdin.addString({message, key, groupContext}, projectId.value)
       if(saveMessageInCrowdin.err) {
-        logger.error(`Error saving string in Crowdin. Returned error: ${saveMessageInCrowdin.err}`)
+        const statusCode = (saveMessageInCrowdin.err as any).status
+        logger.error(saveMessageInCrowdin.err)
+        if (statusCode === 429) {
+          throw new TooManyRequestsError()
+        }
       } else {
         const stringCrowdinId = saveMessageInCrowdin.res.data.id
         if(stringCrowdinId) {
@@ -37,11 +42,15 @@ const updateStringBasedCrowdinTranslation = async (args: UpdateMessageToCrowdinA
     const stringCrowdinId = await vbase.getJSON<any>(CROWDIN_BUCKET, vbaseFileName, true)
     const projectId = await languageLocaleToCrowdinProjectId(crowdin, srcLang)
     if (projectId.err) {
-      logger.error(`Error getting projectId from Crowdin. Returned error: ${projectId.err}`)
+      logger.error(projectId.err)
     } else if (projectId.value) {
       const saveTranslationsInCrowdin = await crowdin.addTranslation({translation: message, to: args.to!, stringId: stringCrowdinId.crowdinId}, projectId.value)
       if(saveTranslationsInCrowdin.err) {
-        logger.error(`Error saving translation in Crowdin. Returned error: ${saveTranslationsInCrowdin.err}`)
+        const statusCode = (saveTranslationsInCrowdin.err as any).status
+        logger.error(saveTranslationsInCrowdin.err)
+        if (statusCode === 429) {
+          throw new TooManyRequestsError()
+        }
       }
     }
   }, messagesInPairs)
