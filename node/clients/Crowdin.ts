@@ -31,8 +31,12 @@ export class Crowdin extends ExternalClient {
     let errMsg
     const res = await this.http.post<any>(`/api/v2/projects/${projectId}/strings`,
       dataToCrowdin,
-      { headers: { json: true }})
-      .catch((err) => {errMsg = err.response})
+      {
+        headers: { json: true },
+        metric: 'crowdin-add-string',
+      })
+      .catch((err) => {errMsg = err.response}
+    )
 
     return {
       err: errMsg,
@@ -50,8 +54,13 @@ export class Crowdin extends ExternalClient {
 
     const res = await this.http.post<any>(`/api/v2/projects/${projectId}/translations`,
       dataToCrowdin,
-      { headers: { json: true }})
-      .catch((err) => {errMsg = err.response})
+      {
+        headers: { json: true },
+        metric: 'crowdin-add-translation',
+      })
+      .catch((err) => {errMsg = err.response}
+    )
+
     return {
       err: errMsg,
       res,
@@ -60,8 +69,13 @@ export class Crowdin extends ExternalClient {
 
   public async getString(stringId: string, projectId: string) {
     let errMsg
-    const res = await this.http.get<CrowdinGetStringResponse>(`/api/v2/projects/${projectId}/strings/${stringId}`)
-      .catch((err) => {errMsg = err.response})
+    const res = await this.http.get<CrowdinGetStringResponse>(`/api/v2/projects/${projectId}/strings/${stringId}`,
+      {
+        metric: 'crowdin-get-string',
+      }
+    )
+    .catch((err) => {errMsg = err.response})
+
     return {
       err: errMsg,
       res,
@@ -70,8 +84,13 @@ export class Crowdin extends ExternalClient {
 
   public async getTranslation(translationId: string, projectId: string) {
     let errMsg
-    const res = await this.http.get<CrowdinGetTranslationResponse>(`/api/v2/projects/${projectId}/translations/${translationId}`)
-      .catch((err) => {errMsg = err.response})
+    const res = await this.http.get<CrowdinGetTranslationResponse>(`/api/v2/projects/${projectId}/translations/${translationId}`,
+      {
+        metric: 'crowdin-get-translation',
+      }
+    )
+    .catch((err) => {errMsg = err.response})
+
     return {
       err: errMsg,
       res,
@@ -80,8 +99,13 @@ export class Crowdin extends ExternalClient {
 
   public async getProject(projectId: string) {
     let errMsg
-    const res = await this.http.get<CrowdinGetProjectResponse>(`/api/v2/projects/${projectId}`)
-      .catch((err) => {errMsg = err.response})
+    const res = await this.http.get<CrowdinGetProjectResponse>(`/api/v2/projects/${projectId}`,
+      {
+        metric: 'crowdin-get-project',
+      }
+    )
+    .catch((err) => {errMsg = err.response})
+
     return {
       err: errMsg,
       res,
@@ -90,8 +114,13 @@ export class Crowdin extends ExternalClient {
 
   public async listProjects() {
     let errMsg
-    const res = await this.http.get<CrowdinListProjects>(`/api/v2/projects`)
-      .catch((err) => {errMsg = err.response})
+    const res = await this.http.get<CrowdinListProjects>(`/api/v2/projects`,
+      {
+        metric: 'crowdin-list-projects',
+      }
+    )
+    .catch((err) => {errMsg = err.response})
+
     return {
       err: errMsg,
       res,
