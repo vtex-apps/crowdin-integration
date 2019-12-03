@@ -5,7 +5,7 @@ import { map, toPairs } from 'ramda'
 import { ColossusEventContext } from '../../typings/Colossus'
 import { UpdateMessageToCrowdinArg } from '../../typings/Messages'
 import { objToHash } from '../../utils'
-import { CROWDIN_BUCKET } from '../../utils/constants'
+import { CROWDIN_BUCKET, STRING_ALREADY_EXPORTED_MESSAGE } from '../../utils/constants'
 import { languageLocaleToCrowdinProjectId } from '../../utils/crowdin'
 
 const updateStringBasedCrowdinString = async (args: UpdateMessageToCrowdinArg, {clients: {crowdin, vbase}, vtex: {logger}}: ColossusEventContext, srcLang: string) => {
@@ -19,7 +19,10 @@ const updateStringBasedCrowdinString = async (args: UpdateMessageToCrowdinArg, {
       const saveMessageInCrowdin = await crowdin.addString({message, key, groupContext}, projectId.value)
       if(saveMessageInCrowdin.err) {
         const statusCode = (saveMessageInCrowdin.err as any).status
-        logger.error(saveMessageInCrowdin.err)
+        const errorMessage = (saveMessageInCrowdin.err as any).data.errors ? (saveMessageInCrowdin.err as any).data.errors[0].error.errors[0].message : ''
+        if(errorMessage !== STRING_ALREADY_EXPORTED_MESSAGE) {
+          logger.error(saveMessageInCrowdin.err)
+        }
         if (statusCode === 429) {
           throw new TooManyRequestsError()
         }

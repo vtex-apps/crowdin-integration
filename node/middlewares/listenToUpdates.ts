@@ -1,4 +1,5 @@
 import parseBody = require('co-body')
+import { isEmpty, toPairs } from 'ramda'
 
 import {
   CrowdinGetProjectResponse,
@@ -7,8 +8,9 @@ import {
   CrowdinNewTranslationApprovedEvent
 } from '../typings/Crowdin'
 import { CROWDIN_BUCKET } from '../utils/constants'
+import { crowdinProjectsIds } from '../utils/crowdin'
 
-export async function logUpdateInTranslations(ctx: Context, next: () => Promise<void>) {
+export async function getInfosFromCrowdin(ctx: Context, next: () => Promise<void>) {
   const { crowdin, vbase } = ctx.clients
   const { logger } = ctx.vtex
   const body = await parseBody(ctx.req) as CrowdinNewTranslationApprovedEvent
@@ -21,6 +23,10 @@ export async function logUpdateInTranslations(ctx: Context, next: () => Promise<
     logger.error(srcMessageInfoFromCrowdin.err)
     return
   }
+  if(!(srcMessageInfoFromCrowdin.res as CrowdinGetStringResponse).data) {
+    logger.error('Unexpected data format returned from Crowdin')
+    return
+  }
   const srcMessage = (srcMessageInfoFromCrowdin.res as CrowdinGetStringResponse).data.text
   const groupContext = (srcMessageInfoFromCrowdin.res as CrowdinGetStringResponse).data.context
 
@@ -30,14 +36,25 @@ export async function logUpdateInTranslations(ctx: Context, next: () => Promise<
     logger.error(targetMessageInfoFromCrowdin.err)
     return
   }
-  const targetMessage = (targetMessageInfoFromCrowdin.res as CrowdinGetTranslationResponse).data.text
-
-  const projectInfoFromCrowdin = await crowdin.getProject(body.project_id)
-  if(projectInfoFromCrowdin.err) {
-    logger.error(projectInfoFromCrowdin.err)
+  if(!(targetMessageInfoFromCrowdin.res as CrowdinGetTranslationResponse).data) {
+    logger.error('Unexpected data format returned from Crowdin')
     return
   }
-  const srcLang = (projectInfoFromCrowdin.res as CrowdinGetProjectResponse).data.sourceLanguageId
+  const targetMessage = (targetMessageInfoFromCrowdin.res as CrowdinGetTranslationResponse).data.text
+
+  const crowdinProjectsIdsArray = toPairs(crowdinProjectsIds)
+  const maybeProject = crowdinProjectsIdsArray.filter(([_, projectId]) => body.project_id === projectId)
+  let srcLang
+  if(isEmpty(maybeProject)) {
+    const projectInfoFromCrowdin = await crowdin.getProject(body.project_id)
+    if(projectInfoFromCrowdin.err) {
+      logger.error(projectInfoFromCrowdin.err)
+      return
+    }
+    srcLang = (projectInfoFromCrowdin.res as CrowdinGetProjectResponse).data.sourceLanguageId
+  } else {
+    srcLang = maybeProject[0][0]
+  }
 
   const targetLang = body.language
 

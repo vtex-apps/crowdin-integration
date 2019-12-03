@@ -44,19 +44,24 @@ export function languageLocaleToCrowdinLanguageId(lang: string): string {
 
 export async function languageLocaleToCrowdinProjectId(crowdin: Crowdin, languageLocale: string) {
   const crowdinLangId = languageLocaleToCrowdinLanguageId(languageLocale)
-  const projectsInfoObj = await crowdin.listProjects()
-  if(projectsInfoObj.err) {
-    return {value: null, err: 'Error getting projects list for account'}
+
+  if(crowdinProjectsIds[crowdinLangId]) {
+    return {value: crowdinProjectsIds[crowdinLangId], err: null}
+  } else {
+    const projectsInfoObj = await crowdin.listProjects()
+    if(projectsInfoObj.err) {
+      return {value: null, err: 'Error getting projects list for account'}
+    }
+    const projectsInfo = (projectsInfoObj.res as CrowdinListProjects).data
+    const projectBySrcLang = projectsInfo.filter((projectInfo) => projectInfo.data.sourceLanguageId === crowdinLangId)
+    if(projectBySrcLang.length === 0) {
+      return {value: null, err: `There is not a project with source language ${crowdinLangId} in Crowdin. You need to create it before saving strings in that language.`}
+    }
+    projectsInfo.map((project) => crowdinProjectsIds[project.data.sourceLanguageId] = project.data.id)
+
+    return {value: projectBySrcLang[0].data.id, err: null}
   }
-  const projectsInfo = (projectsInfoObj.res as CrowdinListProjects).data
-  const projectBySrcLang = projectsInfo.filter((projectInfo) => projectInfo.data.sourceLanguageId === crowdinLangId)
-  if(projectBySrcLang.length === 0) {
-    return {value: null, err: `There is not a project with source language ${crowdinLangId} in Crowdin. You need to create it before saving strings in that language.`}
-  }
-  if(projectBySrcLang.length > 1) {
-    return {value: null, err: `There is more than one project with source language ${crowdinLangId} in Crowdin. Cannot resolve which project use for this language.`}
-  }
-  return {value: projectBySrcLang[0].data.id, err: null}
 }
 
 export const crowdinSettings = { tokenApiV2: '' }
+export const crowdinProjectsIds = {} as Record<string, string>
