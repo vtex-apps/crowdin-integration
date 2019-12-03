@@ -85,7 +85,7 @@ export async function saveInCrowdin(ctx: ColossusEventContext, next: () => Promi
     }))
   }
 
-  logger.error(`Errors in messages export from Messages to Crowdin: ${errors}`)
+  logger.error(errors)
 
   await next()
 }
