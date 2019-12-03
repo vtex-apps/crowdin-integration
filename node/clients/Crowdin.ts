@@ -15,8 +15,9 @@ export class Crowdin extends ExternalClient {
     super('http://api.crowdin.com', context, {
       ...options,
       headers: {
-        ['x-vtex-use-https']: 'true',
         Authorization: `Bearer ${crowdinSettings.tokenApiV2}`,
+        'content-type': 'application/json',
+        'x-vtex-use-https': 'true',
       },
     })
   }
@@ -32,7 +33,6 @@ export class Crowdin extends ExternalClient {
     const res = await this.http.post<any>(`/api/v2/projects/${projectId}/strings`,
       dataToCrowdin,
       {
-        headers: { json: true },
         metric: 'crowdin-add-string',
       })
       .catch((err) => {errMsg = err.response}
@@ -55,7 +55,6 @@ export class Crowdin extends ExternalClient {
     const res = await this.http.post<any>(`/api/v2/projects/${projectId}/translations`,
       dataToCrowdin,
       {
-        headers: { json: true },
         metric: 'crowdin-add-translation',
       })
       .catch((err) => {errMsg = err.response}
